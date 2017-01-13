@@ -1,19 +1,19 @@
 var express = require('express'),
-    session = require('express-session'),
-    cookieParser = require('cookie-parser'),
-    app = express(),
-    passport = require('passport'),
-    bodyParser = require('body-parser'),
-    NestStrategy = require('passport-nest').Strategy,
-    request = require('request'),
-    fs = require('fs');
+	session = require('express-session'),
+	cookieParser = require('cookie-parser'),
+	app = express(),
+	passport = require('passport'),
+	bodyParser = require('body-parser'),
+	NestStrategy = require('passport-nest').Strategy,
+	request = require('request'),
+	fs = require('fs');
 
 passport.use(new NestStrategy({
-    clientID: process.env.NEST_ID,
-    clientSecret: process.env.NEST_SECRET,
-    tokenURL: 'https://api.home.nest.com/oauth2/access_token',
-    authorizationURL: 'https://home.nest.com/login/oauth2'
-  }
+		clientID: process.env.NEST_ID,
+		clientSecret: process.env.NEST_SECRET,
+		tokenURL: 'https://api.home.nest.com/oauth2/access_token',
+		authorizationURL: 'https://home.nest.com/login/oauth2'
+	}
 ));
 
 var bearerToken = process.env.NEST_BEARER;
@@ -35,17 +35,16 @@ app.use(passport.session());
 
 app.get('/auth/nest', passport.authenticate('nest'));
 app.get('/auth/nest/callback',
-        passport.authenticate('nest', { }),
-        function(req, res) {
-        	console.log(req.user.accessToken);
-        	bearerToken = req.user.accessToken;
-        	getNestAPIJSON(req.user.accessToken, function(body){
-        		console.log(body);
-        		
-        	});
-        	res.send('/');
-        }
-       );
+	passport.authenticate('nest', { }),
+	function(req, res) {
+		console.log(req.user.accessToken);
+		bearerToken = req.user.accessToken;
+		getNestAPIJSON(req.user.accessToken, function(body){
+			console.log(body);
+		});
+		res.send('/');
+	}
+);
 
 function getNestAPIJSON(bearerToken, callback){
 	request.get({ url: 'https://developer-api.nest.com/'}, function (error, response, body) {
@@ -60,12 +59,9 @@ function getNestAPIJSON(bearerToken, callback){
 }
 
 var download = function(uri, filename, callback){
-  request.head(uri, function(err, res, body){
-    //console.log('content-type:', res.headers['content-type']);
-    //console.log('content-length:', res.headers['content-length']);
-
-    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-  });
+	request.head(uri, function(err, res, body){
+		request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+	});
 };
 
 var grabImage = function(){
