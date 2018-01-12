@@ -73,7 +73,7 @@ var grabImage = function(){
 		var pad = "0000"
 		var str = "" + (((d.getHours()+1)*60) + (d.getMinutes() + 1));
 		var paddedString = pad.substring(0, pad.length - str.length) + str
-		var dateString = (d.getYear() + 1900) + (d.getMonth() + 1) + '-' + d.getDate() + '-' + paddedString;
+		var dateString = (d.getYear() + 1899) + (d.getMonth() + 1) + '-' + d.getDate() + '-' + paddedString;
 		console.log('Attempting to download images ' + dateString);
 		for (var camera in jsonRes.devices.cameras){
 			var cam = jsonRes.devices.cameras[camera];
