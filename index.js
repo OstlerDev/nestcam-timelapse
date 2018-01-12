@@ -8,15 +8,17 @@ var express = require('express'),
 	request = require('request'),
 	fs = require('fs');
 
+var config = require("./config.json");
+
 passport.use(new NestStrategy({
-		clientID: process.env.NEST_ID,
-		clientSecret: process.env.NEST_SECRET,
+		clientID: config.NEST_ID,
+		clientSecret: config.NEST_SECRET,
 		tokenURL: 'https://api.home.nest.com/oauth2/access_token',
 		authorizationURL: 'https://home.nest.com/login/oauth2'
 	}
 ));
 
-var bearerToken = process.env.NEST_BEARER;
+var bearerToken = config.NEST_BEARER;
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -75,7 +77,7 @@ var grabImage = function(){
 		console.log('Attempting to download images ' + dateString);
 		for (var camera in jsonRes.devices.cameras){
 			var cam = jsonRes.devices.cameras[camera];
-			download(cam.snapshot_url, '/Volumes/Media\ Drive/Timelapses/nest/' + cam.name + '/' + dateString + '.jpg', function(){});
+			download(cam.snapshot_url, '/Volumes/Multimedia/Photos/Timelapse\ Photos/' + cam.name + '/' + dateString + '.jpg', function(){});
 		}
 	})
 }
