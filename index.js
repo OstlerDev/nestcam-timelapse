@@ -77,7 +77,10 @@ var grabImage = function(){
 		console.log('Attempting to download images ' + dateString);
 		for (var camera in jsonRes.devices.cameras){
 			var cam = jsonRes.devices.cameras[camera];
-			download(cam.snapshot_url, '/Volumes/Multimedia/Photos/Timelapse\ Photos/' + cam.name + '/' + dateString + '.jpg', function(){});
+			if (!fs.existsSync('/Volumes/Multimedia/Photos/Timelapse\ Photos/' + cam.name + "-" + cam.device_id.substr(0,6) + '/')){
+				fs.mkdirSync('/Volumes/Multimedia/Photos/Timelapse\ Photos/' + cam.name + "-" + cam.device_id.substr(0,6) + '/');
+			}
+			download(cam.snapshot_url, '/Volumes/Multimedia/Photos/Timelapse\ Photos/' + cam.name + "-" + cam.device_id.substr(0,6) + '/' + dateString + '.jpg', function(){});
 		}
 	})
 }
